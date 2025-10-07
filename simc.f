@@ -1282,6 +1282,7 @@ c	  recon0%all(i) = vertex0%all(i)
 c	enddo
 
 	recon0 = vertex0
+	write(6,*) 'before complete main'
 	call complete_main(.true.,main0,vertex0,vertex0,recon0,success)
 	central%sigcc = main0%sigcc
 
