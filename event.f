@@ -987,15 +987,17 @@ c	   if ((vertex%Emiss**2-vertex%Pmiss**2).lt.(Mp+Mpi0)**2) then
 	   endif
 	endif
 
+
+	vertex%zhad = vertex%p%E/vertex%nu
+	vertex%pt2 = vertex%p%P**2*(1.0-cos(main%theta_pq)**2)
 	if(doing_semi) then
-	   vertex%zhad = vertex%p%E/vertex%nu
-	   vertex%pt2 = vertex%p%P**2*(1.0-cos(main%theta_pq)**2)
 	   if(vertex%zhad.gt.1.0) then
+	      write(6,*) 'WARNING! z=E/nu>1.0. This should never happen. Setting success to .false.'
 	      success=.false.
 	      return
 	   endif
 	endif
-
+	
 
 ! Determine PHYSICS scattering angles theta/phi for the two spectrometer
 ! vectors, and the Jacobian which we must include in our xsec computation
@@ -1333,10 +1335,11 @@ CDJG Calculate the "Collins" (phi_pq+phi_targ) and "Sivers"(phi_pq-phi_targ) ang
 	  ntup%t = t
 	endif
 
-	if(doing_semi.or.doing_rho) then
+cDJG  Always calculate z and pt. 
+cDJG	if(doing_semi.or.doing_rho) then
 	   recon%zhad = recon%p%E/recon%nu
 	   recon%pt2 = recon%p%P**2*(1.0-cos(recon%theta_pq)**2)
-	endif
+cDJG	endif
 
 ! Calculate Trec, Em. Trec for (A-1) system (eep), or for struck nucleon (pi/K)
 ! Note that there are other ways to calculate 'Em' for the pion/kaon case.
